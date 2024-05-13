@@ -13,6 +13,7 @@ type (
 		Repo   string `toml:"repo"`
 		Rename string `toml:"rename,omitempty"`
 		WarmUp bool   `toml:"warm_up,omitempty"`
+		Memo   string `toml:"memo,omitempty"`
 	}
 
 	// SiteConfig represents a remote location and the directory to clone the repos to
@@ -49,8 +50,12 @@ func (repo Repo) RepoUrl(site SiteConfig) string {
 }
 
 func (repo Repo) FullPath(site SiteConfig) string {
+	repo.Repo = strings.TrimSpace(repo.Repo)
 	if repo.Rename != "" {
+		if strings.ToLower(repo.Rename) == "{base}" {
+			return filepath.Join(site.Dir, filepath.Base(repo.Repo))
+		}
 		return filepath.Join(site.Dir, strings.TrimSpace(repo.Rename))
 	}
-	return filepath.Join(site.Dir, strings.TrimSpace(repo.Repo))
+	return filepath.Join(site.Dir, repo.Repo)
 }

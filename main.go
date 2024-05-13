@@ -2,26 +2,57 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"path/filepath"
+
+	"github.com/spf13/cobra"
 )
 
-func main() {
-	if len(os.Args) < 2 {
-		fmt.Println("Usage: repoll [path to the TOML config file]")
-		os.Exit(1)
-	}
+// 主命令和根命令
+var rootCmd = &cobra.Command{
+	Use:   "repoll [path to the TOML config file]",
+	Short: "Repoll clones or updates repositories based on the TOML configuration.",
+	Run: func(cmd *cobra.Command, args []string) {
+		if len(args) < 1 {
+			fmt.Println("Usage: repoll [path to the TOML config file]")
+		}
 
-	configPath, err := filepath.Abs(os.Args[1])
+		configPath, err := filepath.Abs(args[0])
+		if err != nil {
+			fmt.Printf("Error determining absolute path: %s\n", err)
+		}
+
+		// 假设已经有了一个 processConfig 函数
+		if err := processConfig(configPath); err != nil {
+			fmt.Printf("Error processing config file: %s\n", err)
+		}
+	},
+}
+
+// mkconf 子命令
+var mkconfCmd = &cobra.Command{
+	Use:   "mkconf [directory]",
+	Short: "Mkconf scans the given directory for git repositories and creates a TOML config for repoll.",
+	Run: func(cmd *cobra.Command, args []string) {
+		if len(args) < 1 {
+			fmt.Println("Usage: mkconf [directory]")
+		}
+		if err := makeConfig(args[0]); err != nil {
+			fmt.Printf("Error making config for %s: %s\n", args[0], err)
+		}
+	},
+}
+
+func processConfig(configPath string) (err error) {
+	configPath, err = filepath.Abs(configPath)
 	if err != nil {
 		fmt.Printf("Error determining absolute path: %s\n", err)
-		os.Exit(1)
+		return err
 	}
 
 	config, err := readConfig(configPath)
 	if err != nil {
 		fmt.Printf("Error reading config file: %s\n", err)
-		os.Exit(1)
+		return err
 	}
 
 	for _, site := range config.Sites {
@@ -44,4 +75,15 @@ func main() {
 	}
 
 	fmt.Println("Repository processing complete.")
+	return nil
+}
+
+func init() {
+	rootCmd.AddCommand(mkconfCmd)
+}
+
+func main() {
+	if err := rootCmd.Execute(); err != nil {
+		fmt.Println(err)
+	}
 }
