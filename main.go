@@ -9,27 +9,34 @@ import (
 
 // 主命令和根命令
 var rootCmd = &cobra.Command{
-	Use:   "repoll [path to the TOML config file]",
+	Use: "repoll",
+}
+
+// make 子命令
+var cmdMake = &cobra.Command{
+	Use:   "make [paths to the TOML config file]",
 	Short: "Repoll clones or updates repositories based on the TOML configuration.",
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) < 1 {
 			fmt.Println("Usage: repoll [path to the TOML config file]")
 		}
 
-		configPath, err := filepath.Abs(args[0])
-		if err != nil {
-			fmt.Printf("Error determining absolute path: %s\n", err)
-		}
+		for _, path := range args {
+			configPath, err := filepath.Abs(path)
+			if err != nil {
+				fmt.Printf("Error determining absolute path: %s\n", err)
+			}
 
-		// 假设已经有了一个 processConfig 函数
-		if err := processConfig(configPath); err != nil {
-			fmt.Printf("Error processing config file: %s\n", err)
+			// 假设已经有了一个 processConfig 函数
+			if err := processConfig(configPath); err != nil {
+				fmt.Printf("Error processing config file: %s\n", err)
+			}
 		}
 	},
 }
 
 // mkconf 子命令
-var mkconfCmd = &cobra.Command{
+var cmdMakeConf = &cobra.Command{
 	Use:   "mkconf [directory]",
 	Short: "Mkconf scans the given directory for git repositories and creates a TOML config for repoll.",
 	Run: func(cmd *cobra.Command, args []string) {
@@ -79,7 +86,8 @@ func processConfig(configPath string) (err error) {
 }
 
 func init() {
-	rootCmd.AddCommand(mkconfCmd)
+	rootCmd.AddCommand(cmdMake)
+	rootCmd.AddCommand(cmdMakeConf)
 }
 
 func main() {

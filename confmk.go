@@ -85,7 +85,7 @@ func makeConfig(dir string) error {
 
 		origin, err := getGitRemoteOrigin(repoPath)
 		if err != nil {
-			return irr.Wrap(err, "get git remote origin failed, path= %s", repoPath)
+			fmt.Println(irr.Wrap(err, "get git remote origin failed, path= %s", repoPath))
 		}
 		uncommitted, err := hasUncommittedChanges(repoPath)
 		if err != nil {
