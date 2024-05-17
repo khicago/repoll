@@ -2,8 +2,11 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"path/filepath"
+	"time"
 
+	"github.com/bagaking/goulp/wlog"
 	"github.com/spf13/cobra"
 )
 
@@ -21,15 +24,23 @@ var cmdMake = &cobra.Command{
 			fmt.Println("Usage: repoll [path to the TOML config file]")
 		}
 
+		report := MakeReport{Actions: make([]*MakeAction, 0)}
 		for _, path := range args {
 			configPath, err := filepath.Abs(path)
 			if err != nil {
-				fmt.Printf("Error determining absolute path: %s\n", err)
+				wlog.Common().Errorf("Error determining absolute path: %s\n", err)
 			}
 
 			// 假设已经有了一个 processConfig 函数
-			if err := processConfig(configPath); err != nil {
-				fmt.Printf("Error processing config file: %s\n", err)
+			if err := processConfig(configPath, &report); err != nil {
+				wlog.Common().Errorf("Error processing config file: %s\n", err)
+			}
+		}
+
+		if reportFlag, _ := cmd.Flags().GetBool("report"); reportFlag {
+			reportFileName := time.Now().Format("20060102-150405") + "_make_report.log"
+			if err := os.WriteFile(reportFileName, []byte(report.Report()), os.ModePerm); err != nil {
+				wlog.Common().Errorf("Write report %s failed, err= %s\n", reportFileName, err)
 			}
 		}
 	},
@@ -43,55 +54,29 @@ var cmdMakeConf = &cobra.Command{
 		if len(args) < 1 {
 			fmt.Println("Usage: mkconf [directory]")
 		}
-		if err := makeConfig(args[0]); err != nil {
-			fmt.Printf("Error making config for %s: %s\n", args[0], err)
+		report := MkconfReport{Actions: make([]*MkconfAction, 0)}
+		if err := makeConfig(args[0], &report); err != nil {
+			wlog.Common().Errorf("Error making config for %s: %s\n", args[0], err)
+		}
+		if reportFlag, _ := cmd.Flags().GetBool("report"); reportFlag {
+			reportFileName := time.Now().Format("20060102-150405") + "_mkconf_report.log"
+			if err := os.WriteFile(reportFileName, []byte(report.Report()), os.ModePerm); err != nil {
+				wlog.Common().Errorf("Write report %s failed, err= %s\n", reportFileName, err)
+			}
 		}
 	},
-}
-
-func processConfig(configPath string) (err error) {
-	configPath, err = filepath.Abs(configPath)
-	if err != nil {
-		fmt.Printf("Error determining absolute path: %s\n", err)
-		return err
-	}
-
-	config, err := readConfig(configPath)
-	if err != nil {
-		fmt.Printf("Error reading config file: %s\n", err)
-		return err
-	}
-
-	for _, site := range config.Sites {
-		for _, repo := range site.Repos {
-			if err = gitCloneOrUpdate(repo, site); err != nil {
-				fmt.Printf("Processing repository %s Failed, err= %s .\n", repo.Repo, err)
-				continue
-			} else {
-				fmt.Printf("Processing repository %s success.\n", repo.Repo)
-			}
-
-			if repo.WarmUp || site.WarmUpAll {
-				if err = warmUpRepo(repo.FullPath(site)); err != nil {
-					fmt.Printf("- warm-up operations for repo %s failed, err= %s\n", repo.Repo, err)
-				} else {
-					fmt.Printf("- warm-up operations for repo %s success.\n", repo.Repo)
-				}
-			}
-		}
-	}
-
-	fmt.Println("Repository processing complete.")
-	return nil
-}
-
-func init() {
-	rootCmd.AddCommand(cmdMake)
-	rootCmd.AddCommand(cmdMakeConf)
 }
 
 func main() {
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
 	}
+}
+
+func init() {
+	cmdMake.Flags().Bool("report", false, "Generate a detailed report after command execution.")
+	cmdMakeConf.Flags().Bool("report", false, "Generate a detailed report after command execution.")
+
+	rootCmd.AddCommand(cmdMake)
+	rootCmd.AddCommand(cmdMakeConf)
 }

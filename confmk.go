@@ -53,7 +53,7 @@ func mkStatusMemo(str string, need bool, memo string) string {
 	return str
 }
 
-func makeConfig(dir string) error {
+func makeConfig(dir string, outReport *MkconfReport) error {
 	dirAbs, err := filepath.Abs(dir)
 	if err != nil {
 		return irr.Wrap(err, "wrong dir")
@@ -83,17 +83,28 @@ func makeConfig(dir string) error {
 			return nil
 		}
 
+		ma := &MkconfAction{
+			Time:   time.Now(),
+			Origin: path,
+		}
+		outReport.Actions = append(outReport.Actions, ma)
+
 		origin, err := getGitRemoteOrigin(repoPath)
 		if err != nil {
 			fmt.Println(irr.Wrap(err, "get git remote origin failed, path= %s", repoPath))
+		} else {
+			ma.HasOrigin = true
+			ma.Origin = origin
 		}
 		uncommitted, err := hasUncommittedChanges(repoPath)
 		if err != nil {
 			fmt.Println(irr.Wrap(err, "get git uncommitted changes failed, path= %s", repoPath))
+			ma.Uncommitted = true
 		}
 		unmerged, err := hasUnmergedCommits(repoPath)
 		if err != nil {
 			fmt.Println(irr.Wrap(err, "get git unmerged changes failed, path= %s", repoPath))
+			ma.Unmerged = true
 		}
 
 		statusMemo := mkStatusMemo("", uncommitted, "uncommitted")
