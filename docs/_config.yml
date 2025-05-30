@@ -1,0 +1,58 @@
+title: repoll
+description: The Ultimate Git Repository Management Tool
+url: "https://khicago.github.io/repoll"
+baseurl: ""
+
+# Theme
+theme: minima
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+# Navigation
+navigation:
+  - title: Home
+    url: /
+  - title: Getting Started
+    url: /getting-started
+  - title: Configuration
+    url: /configuration
+  - title: Examples
+    url: /examples
+  - title: API Reference
+    url: /api
+  - title: GitHub
+    url: https://github.com/khicago/repoll
+
+# SEO
+author: khicago
+twitter:
+  username: khicago
+social:
+  name: repoll
+  links:
+    - https://github.com/khicago/repoll
+
+# Markdown
+markdown: kramdown
+highlighter: rouge
+
+# Collections
+collections:
+  docs:
+    output: true
+    permalink: /:collection/:name/
+
+# Defaults
+defaults:
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "default"
+  - scope:
+      path: "_docs"
+      type: "docs"
+    values:
+      layout: "doc" 

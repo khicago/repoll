@@ -49,3 +49,13 @@ func (mr *MkconfReport) Report() string {
 	}
 	return ret
 }
+
+func (ma *MakeAction) String() string {
+	return fmt.Sprintf("%v | Repo: %s | Duration: %v | Success: %v | Error: %s | Memo: %s",
+		ma.Time, ma.Repository, ma.Duration, ma.Success, ma.Error, ma.Memo)
+}
+
+func (ma *MkconfAction) String() string {
+	return fmt.Sprintf("%v | Path: %s | Origin: %s | HasOrigin: %v | Uncommitted: %v | Unmerged: %v",
+		ma.Time, ma.Path, ma.Origin, ma.HasOrigin, ma.Uncommitted, ma.Unmerged)
+}

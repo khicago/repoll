@@ -27,10 +27,18 @@ func gitCloneOrUpdate(repo Repo, site SiteConfig) error {
 	if _, err := os.Stat(fullPath); os.IsNotExist(err) {
 		fmt.Printf("Cloning %s into %s...\n", repoURL, fullPath)
 		cmd := exec.Command("git", "clone", repoURL, fullPath)
-		return runCommandWithTimer(cmd)
+		if err := runCommandWithTimer(cmd); err != nil {
+			return fmt.Errorf("failed to clone repository %s to %s: %w", repoURL, fullPath, err)
+		}
+		return nil
+	} else if err != nil {
+		return fmt.Errorf("failed to check if directory %s exists: %w", fullPath, err)
 	} else {
 		fmt.Printf("Updating repository in %s...\n", fullPath)
 		cmd := exec.Command("git", "-C", fullPath, "pull")
-		return runCommandWithTimer(cmd)
+		if err := runCommandWithTimer(cmd); err != nil {
+			return fmt.Errorf("failed to update repository in %s: %w", fullPath, err)
+		}
+		return nil
 	}
 }
