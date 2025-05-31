@@ -1,7 +1,7 @@
 title: repoll
 description: The Ultimate Git Repository Management Tool
-url: "https://khicago.github.io/repoll"
-baseurl: ""
+url: "https://khicago.github.io"
+baseurl: "/repoll"
 
 # Theme
 theme: minima
@@ -55,4 +55,4 @@ defaults:
       path: "_docs"
       type: "docs"
     values:
-      layout: "doc" 
+      layout: "default" 
