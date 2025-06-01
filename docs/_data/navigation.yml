@@ -1,0 +1,45 @@
+# main links
+main:
+  - title: "Home"
+    url: /
+  - title: "Examples"
+    url: /examples/
+  - title: "API Reference"
+    url: /api/
+  - title: "GitHub"
+    url: https://github.com/khicago/repoll
+
+# documentation links
+docs:
+  - title: Getting Started
+    children:
+      - title: "Quick Start"
+        url: /
+      - title: "Installation"
+        url: /#installation
+      - title: "Basic Usage"
+        url: /#basic-usage
+  - title: Configuration
+    children:
+      - title: "Configuration Format"
+        url: /#configuration-format
+      - title: "Site Configuration"
+        url: /#site-configuration
+      - title: "Repository Configuration"
+        url: /#repository-configuration
+  - title: Examples
+    children:
+      - title: "Basic Examples"
+        url: /examples/#basic-usage
+      - title: "Enterprise Setup"
+        url: /examples/#enterprise-setup
+      - title: "Advanced Configuration"
+        url: /examples/#advanced-configuration
+  - title: API Reference
+    children:
+      - title: "Command Line Interface"
+        url: /api/#command-line-interface
+      - title: "Configuration API"
+        url: /api/#configuration-api
+      - title: "Repository Management API"
+        url: /api/#repository-management-api 
