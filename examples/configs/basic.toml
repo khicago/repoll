@@ -1,0 +1,14 @@
+[[sites]]
+remote = "https://github.com/"
+dir = "./projects/"
+warm_up_all = true
+
+[[sites.repos]]
+repo = "golang/go"
+memo = "Go programming language"
+
+[[sites.repos]]
+repo = "kubernetes/kubernetes"
+rename = "k8s"
+warm_up = true
+memo = "Container orchestration platform"

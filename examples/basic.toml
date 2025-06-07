@@ -1,0 +1,15 @@
+[[sites]]
+remote = "https://github.com/"
+dir = "./test-repos/"
+warm_up_all = false
+
+[[sites.repos]]
+repo = "golang/example"
+warm_up = true
+memo = "Go example repository"
+
+[[sites.repos]]
+repo = "microsoft/vscode"
+rename = "vscode"
+warm_up = false
+memo = "Visual Studio Code" 

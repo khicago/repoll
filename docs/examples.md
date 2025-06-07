@@ -6,298 +6,843 @@ permalink: /examples/
 
 # Examples
 
-Here are some practical examples of using repoll in different scenarios.
+Real-world configuration examples for different use cases and development scenarios.
 
-## Basic Usage
+## 🎯 Quick Start Examples
 
-### Simple Repository Management
+### Personal Open Source Setup
 
 ```toml
-# repos.toml
+# Basic setup for open source contributions
 [[sites]]
-    remote_prefix = "https://github.com/"
-    dir = "./projects/"
-    warm_up_all = true
+remote = "https://github.com/"
+dir = "./oss/"
+warm_up_all = true
 
-    [[sites.repos]]
-        repo = "golang/go"
-        warm_up = true
+  [[sites.repos]]
+  repo = "golang/go"
+  memo = "Go language source"
 
-    [[sites.repos]]
-        repo = "microsoft/vscode"
-        memo = "VS Code editor"
+  [[sites.repos]]
+  repo = "microsoft/vscode"
+  memo = "VS Code editor"
+
+  [[sites.repos]]
+  repo = "kubernetes/kubernetes"
+  rename = "k8s"
+  memo = "Container orchestration"
 ```
 
-Run with:
+**Usage:**
 ```bash
-repoll repos.toml
+repoll personal-oss.toml
 ```
 
-## Enterprise Setup
+**Result:**
+```
+✓ Cloned golang/go -> ./oss/go
+🔥 Warmed up ./oss/go (Go project)
+✓ Cloned microsoft/vscode -> ./oss/vscode
+🔥 Warmed up ./oss/vscode (Node.js project)
+✓ Cloned kubernetes/kubernetes -> ./oss/k8s
+🔥 Warmed up ./oss/k8s (Go project)
+```
 
-### Microservices Development
+### Team Development Environment
 
 ```toml
-# microservices.toml
+# Company projects setup
 [[sites]]
-    remote_prefix = "https://git.company.com/"
-    dir = "./microservices/"
-    warm_up_all = true
+remote = "git@company.com:"
+dir = "./company/"
+warm_up_all = true
 
-    [[sites.repos]]
-        repo = "team/user-service"
-        memo = "User management microservice"
+  [[sites.repos]]
+  repo = "frontend/web-app"
+  rename = "webapp"
+  memo = "Main web application"
 
-    [[sites.repos]]
-        repo = "team/payment-service"
-        memo = "Payment processing"
+  [[sites.repos]]
+  repo = "backend/api-service"
+  rename = "api"
+  memo = "REST API service"
 
-    [[sites.repos]]
-        repo = "team/notification-service"
-        memo = "Notification system"
+  [[sites.repos]]
+  repo = "infrastructure/k8s-configs"
+  rename = "k8s"
+  warm_up = false
+  memo = "Kubernetes configurations"
+```
 
-    [[sites.repos]]
-        repo = "team/api-gateway"
-        memo = "Main API gateway"
+## 🏢 Enterprise Scenarios
+
+### Microservices Architecture
+
+```toml
+# Backend services
+[[sites]]
+remote = "https://gitlab.company.com/"
+dir = "./services/"
+warm_up_all = true
+
+  [[sites.repos]]
+  repo = "platform/user-service"
+  memo = "User authentication and management"
+
+  [[sites.repos]]
+  repo = "platform/payment-service"
+  memo = "Payment processing"
+
+  [[sites.repos]]
+  repo = "platform/notification-service"
+  memo = "Email and SMS notifications"
+
+  [[sites.repos]]
+  repo = "platform/api-gateway"
+  memo = "Main API gateway"
+
+# Frontend applications
+[[sites]]
+remote = "https://gitlab.company.com/"
+dir = "./frontend/"
+warm_up_all = true
+
+  [[sites.repos]]
+  repo = "ui/customer-portal"
+  rename = "portal"
+  memo = "Customer-facing web app"
+
+  [[sites.repos]]
+  repo = "ui/admin-dashboard"
+  rename = "admin"
+  memo = "Internal admin interface"
+
+# Shared libraries
+[[sites]]
+remote = "https://gitlab.company.com/"
+dir = "./shared/"
+warm_up_all = true
+
+  [[sites.repos]]
+  repo = "shared/common-utils"
+  rename = "utils"
+  memo = "Shared utility functions"
+
+  [[sites.repos]]
+  repo = "shared/ui-components"
+  rename = "components"
+  memo = "Reusable UI components"
 ```
 
 ### Multi-Platform Development
 
 ```toml
-# development.toml
-# GitHub repositories
+# GitHub dependencies
 [[sites]]
-    remote_prefix = "https://github.com/"
-    dir = "./github/"
-    warm_up_all = true
+remote = "https://github.com/"
+dir = "./deps/"
+warm_up_all = true
 
-    [[sites.repos]]
-        repo = "golang/go"
-        memo = "Go language"
+  [[sites.repos]]
+  repo = "gin-gonic/gin"
+  memo = "Go HTTP framework"
 
-    [[sites.repos]]
-        repo = "microsoft/TypeScript"
-        memo = "TypeScript language"
+  [[sites.repos]]
+  repo = "facebook/react"
+  memo = "UI library"
 
-# GitLab repositories
+  [[sites.repos]]
+  repo = "microsoft/TypeScript"
+  memo = "TypeScript compiler"
+
+# Internal GitLab
 [[sites]]
-    remote_prefix = "https://gitlab.com/"
-    dir = "./gitlab/"
+remote = "https://gitlab.internal.com/"
+dir = "./internal/"
+warm_up_all = true
 
-    [[sites.repos]]
-        repo = "gitlab-org/gitlab"
-        warm_up = true
+  [[sites.repos]]
+  repo = "core/authentication"
+  rename = "auth"
+  memo = "Internal auth service"
 
-# Company repositories (SSH)
+  [[sites.repos]]
+  repo = "core/logging"
+  memo = "Centralized logging"
+
+# Legacy Bitbucket
 [[sites]]
-    remote_prefix = "git@company.com:"
-    dir = "./company/"
-    warm_up_all = true
+remote = "https://bitbucket.org/legacy-team/"
+dir = "./legacy/"
+warm_up_all = false
 
-    [[sites.repos]]
-        repo = "team/backend-service"
-        rename = "backend"
-
-    [[sites.repos]]
-        repo = "team/frontend-app"
-        rename = "frontend"
+  [[sites.repos]]
+  repo = "old-system"
+  warm_up = false
+  memo = "Legacy system - manual setup"
 ```
 
-## Advanced Configuration
+## 🔧 Technology-Specific Setups
 
-### Custom Project Structure
+### Go Development Environment
 
 ```toml
-# advanced.toml
+# Go ecosystem projects
 [[sites]]
-    remote_prefix = "https://github.com/company/"
-    dir = "./work/"
-    warm_up_all = true
+remote = "https://github.com/"
+dir = "./go-projects/"
+warm_up_all = true
 
-    [[sites.repos]]
-        repo = "user-service"
-        rename = "users"
-        memo = "User management microservice"
+  [[sites.repos]]
+  repo = "golang/go"
+  memo = "Go standard library"
 
-    [[sites.repos]]
-        repo = "very-long-repository-name"
-        rename = "short-name"
-        memo = "Shortened for convenience"
+  [[sites.repos]]
+  repo = "spf13/cobra"
+  memo = "CLI library"
 
-    [[sites.repos]]
-        repo = "experimental-project"
-        warm_up = false
-        memo = "Don't warm up experimental code"
+  [[sites.repos]]
+  repo = "spf13/viper"
+  memo = "Configuration management"
+
+  [[sites.repos]]
+  repo = "gorilla/mux"
+  memo = "HTTP router"
+
+  [[sites.repos]]
+  repo = "stretchr/testify"
+  memo = "Testing toolkit"
+
+  [[sites.repos]]
+  repo = "uber-go/zap"
+  memo = "Structured logging"
+
+# Personal Go projects
+[[sites]]
+remote = "https://github.com/yourusername/"
+dir = "./my-go/"
+warm_up_all = true
+
+  [[sites.repos]]
+  repo = "awesome-cli-tool"
+  memo = "My CLI application"
+
+  [[sites.repos]]
+  repo = "microservice-template"
+  memo = "Go microservice boilerplate"
 ```
 
-### Open Source Contributions
+### Node.js Full-Stack Setup
 
 ```toml
-# opensource.toml
+# Frontend frameworks
 [[sites]]
-    remote_prefix = "https://github.com/"
-    dir = "./oss-contributions/"
+remote = "https://github.com/"
+dir = "./frontend/"
+warm_up_all = true
 
-    [[sites.repos]]
-        repo = "kubernetes/kubernetes"
-        warm_up = true
-        memo = "Container orchestration"
+  [[sites.repos]]
+  repo = "facebook/react"
+  memo = "React library"
 
-    [[sites.repos]]
-        repo = "hashicorp/terraform"
-        warm_up = true
-        memo = "Infrastructure as code"
+  [[sites.repos]]
+  repo = "vuejs/vue"
+  memo = "Vue.js framework"
 
-    [[sites.repos]]
-        repo = "prometheus/prometheus"
-        warm_up = true
-        memo = "Monitoring system"
+  [[sites.repos]]
+  repo = "angular/angular"
+  memo = "Angular framework"
+
+  [[sites.repos]]
+  repo = "vercel/next.js"
+  rename = "nextjs"
+  memo = "React framework"
+
+# Backend frameworks
+[[sites]]
+remote = "https://github.com/"
+dir = "./backend/"
+warm_up_all = true
+
+  [[sites.repos]]
+  repo = "expressjs/express"
+  memo = "Express.js framework"
+
+  [[sites.repos]]
+  repo = "fastify/fastify"
+  memo = "Fast web framework"
+
+  [[sites.repos]]
+  repo = "nestjs/nest"
+  memo = "NestJS framework"
+
+  [[sites.repos]]
+  repo = "koajs/koa"
+  memo = "Koa.js framework"
+
+# Tools and utilities
+[[sites]]
+remote = "https://github.com/"
+dir = "./tools/"
+warm_up_all = true
+
+  [[sites.repos]]
+  repo = "eslint/eslint"
+  memo = "JavaScript linter"
+
+  [[sites.repos]]
+  repo = "prettier/prettier"
+  memo = "Code formatter"
+
+  [[sites.repos]]
+  repo = "webpack/webpack"
+  memo = "Module bundler"
 ```
 
-## Command Usage Examples
+### Python Data Science Setup
 
-### Configuration Generation
+```toml
+# Core Python projects
+[[sites]]
+remote = "https://github.com/"
+dir = "./python-core/"
+warm_up_all = true
 
-Generate configuration from existing directories:
-```bash
-# Scan current directory
-repoll mkconf .
+  [[sites.repos]]
+  repo = "python/cpython"
+  memo = "Python interpreter"
 
-# Scan specific directory
-repoll mkconf ./my-projects/
+  [[sites.repos]]
+  repo = "pypa/pip"
+  memo = "Package installer"
 
-# Generate with report
-repoll mkconf ./projects/ --report
+  [[sites.repos]]
+  repo = "psf/requests"
+  memo = "HTTP library"
+
+# Data science frameworks
+[[sites]]
+remote = "https://github.com/"
+dir = "./data-science/"
+warm_up_all = true
+
+  [[sites.repos]]
+  repo = "numpy/numpy"
+  memo = "Numerical computing"
+
+  [[sites.repos]]
+  repo = "pandas-dev/pandas"
+  memo = "Data analysis"
+
+  [[sites.repos]]
+  repo = "matplotlib/matplotlib"
+  memo = "Plotting library"
+
+  [[sites.repos]]
+  repo = "scikit-learn/scikit-learn"
+  rename = "sklearn"
+  memo = "Machine learning"
+
+  [[sites.repos]]
+  repo = "tensorflow/tensorflow"
+  memo = "Deep learning"
+
+# Web frameworks
+[[sites]]
+remote = "https://github.com/"
+dir = "./python-web/"
+warm_up_all = true
+
+  [[sites.repos]]
+  repo = "django/django"
+  memo = "Web framework"
+
+  [[sites.repos]]
+  repo = "pallets/flask"
+  memo = "Micro framework"
+
+  [[sites.repos]]
+  repo = "tiangolo/fastapi"
+  memo = "Modern API framework"
 ```
 
-### Repository Management
+## 🎨 Advanced Configuration Patterns
+
+### Environment-Based Setup
+
+**development.toml:**
+```toml
+# Development environment
+[[sites]]
+remote = "https://github.com/"
+dir = "./dev/"
+warm_up_all = true
+
+  [[sites.repos]]
+  repo = "company/main-app"
+  memo = "Main application - dev branch"
+
+[[sites]]
+remote = "https://github.com/"
+dir = "./experiments/"
+warm_up_all = false
+
+  [[sites.repos]]
+  repo = "experimental/new-feature"
+  warm_up = true
+  memo = "Feature development"
+```
+
+**staging.toml:**
+```toml
+# Staging environment
+[[sites]]
+remote = "https://github.com/"
+dir = "./staging/"
+warm_up_all = false
+
+  [[sites.repos]]
+  repo = "company/main-app"
+  warm_up = false
+  memo = "Staging deployment"
+
+  [[sites.repos]]
+  repo = "company/config-staging"
+  rename = "config"
+  memo = "Staging configurations"
+```
+
+**production.toml:**
+```toml
+# Production environment
+[[sites]]
+remote = "https://github.com/"
+dir = "./prod/"
+warm_up_all = false
+
+  [[sites.repos]]
+  repo = "company/main-app"
+  warm_up = false
+  memo = "Production code"
+
+  [[sites.repos]]
+  repo = "company/config-prod"
+  rename = "config"
+  memo = "Production configurations"
+
+  [[sites.repos]]
+  repo = "company/monitoring"
+  memo = "Production monitoring"
+```
+
+### Team-Based Organization
+
+**frontend-team.toml:**
+```toml
+# Frontend team repositories
+[[sites]]
+remote = "https://github.com/company/"
+dir = "./frontend/"
+warm_up_all = true
+
+  [[sites.repos]]
+  repo = "web-app"
+  memo = "Main web application"
+
+  [[sites.repos]]
+  repo = "mobile-app"
+  memo = "React Native mobile app"
+
+  [[sites.repos]]
+  repo = "design-system"
+  memo = "Shared UI components"
+
+# External dependencies
+[[sites]]
+remote = "https://github.com/"
+dir = "./deps/"
+warm_up_all = true
+
+  [[sites.repos]]
+  repo = "facebook/react"
+  memo = "React library"
+
+  [[sites.repos]]
+  repo = "vercel/next.js"
+  rename = "nextjs"
+  memo = "Next.js framework"
+```
+
+**backend-team.toml:**
+```toml
+# Backend team repositories
+[[sites]]
+remote = "https://github.com/company/"
+dir = "./services/"
+warm_up_all = true
+
+  [[sites.repos]]
+  repo = "user-service"
+  memo = "User management API"
+
+  [[sites.repos]]
+  repo = "order-service"
+  memo = "Order processing API"
+
+  [[sites.repos]]
+  repo = "payment-service"
+  memo = "Payment gateway API"
+
+# Infrastructure
+[[sites]]
+remote = "https://github.com/company/"
+dir = "./infra/"
+warm_up_all = false
+
+  [[sites.repos]]
+  repo = "docker-configs"
+  memo = "Docker configurations"
+
+  [[sites.repos]]
+  repo = "k8s-manifests"
+  memo = "Kubernetes manifests"
+```
+
+**devops-team.toml:**
+```toml
+# Infrastructure and deployment
+[[sites]]
+remote = "https://github.com/company/"
+dir = "./infrastructure/"
+warm_up_all = false
+
+  [[sites.repos]]
+  repo = "terraform-modules"
+  rename = "terraform"
+  memo = "Infrastructure as code"
+
+  [[sites.repos]]
+  repo = "ansible-playbooks"
+  rename = "ansible"
+  memo = "Configuration management"
+
+  [[sites.repos]]
+  repo = "helm-charts"
+  rename = "helm"
+  memo = "Kubernetes package manager"
+
+# Monitoring and observability
+[[sites]]
+remote = "https://github.com/"
+dir = "./monitoring/"
+warm_up_all = true
+
+  [[sites.repos]]
+  repo = "prometheus/prometheus"
+  memo = "Monitoring system"
+
+  [[sites.repos]]
+  repo = "grafana/grafana"
+  memo = "Visualization platform"
+
+  [[sites.repos]]
+  repo = "jaegertracing/jaeger"
+  memo = "Distributed tracing"
+```
+
+## 🔄 Dynamic Configuration Generation
+
+### Generate from Existing Projects
 
 ```bash
-# Basic usage
+# Generate configuration from current directory
+repoll mkconf . > repos.toml
+
+# Generate from specific directory
+repoll mkconf ~/projects > my-projects.toml
+
+# Generate from multiple directories
+repoll mkconf ./frontend ./backend > full-stack.toml
+```
+
+### Example Generated Configuration
+
+When running `repoll mkconf` on a directory with existing repositories:
+
+```toml
+# Generated by repoll mkconf on 2024-01-15T10:30:00Z
+
+[[sites]]
+remote = "https://github.com/"
+dir = "./"
+
+  [[sites.repos]]
+  repo = "golang/go"
+  memo = "Auto-detected from ./go/"
+
+  [[sites.repos]]
+  repo = "microsoft/vscode"
+  memo = "Auto-detected from ./vscode/"
+
+[[sites]]
+remote = "git@gitlab.com:"
+dir = "./"
+
+  [[sites.repos]]
+  repo = "company/internal-tool"
+  memo = "Auto-detected from ./internal-tool/"
+```
+
+## 📊 Complex Multi-Project Setup
+
+### Full Development Environment
+
+```toml
+# Core development tools
+[[sites]]
+remote = "https://github.com/"
+dir = "./tools/"
+warm_up_all = true
+
+  [[sites.repos]]
+  repo = "git/git"
+  memo = "Git version control"
+
+  [[sites.repos]]
+  repo = "vim/vim"
+  memo = "Text editor"
+
+  [[sites.repos]]
+  repo = "BurntSushi/ripgrep"
+  memo = "Fast text search"
+
+# Programming languages
+[[sites]]
+remote = "https://github.com/"
+dir = "./languages/"
+warm_up_all = false
+
+  [[sites.repos]]
+  repo = "golang/go"
+  warm_up = true
+  memo = "Go programming language"
+
+  [[sites.repos]]
+  repo = "rust-lang/rust"
+  warm_up = false
+  memo = "Rust programming language"
+
+  [[sites.repos]]
+  repo = "nodejs/node"
+  warm_up = false
+  memo = "Node.js runtime"
+
+# Frameworks and libraries
+[[sites]]
+remote = "https://github.com/"
+dir = "./frameworks/"
+warm_up_all = true
+
+  # Go frameworks
+  [[sites.repos]]
+  repo = "gin-gonic/gin"
+  memo = "Go HTTP framework"
+
+  [[sites.repos]]
+  repo = "gorilla/mux"
+  memo = "Go HTTP router"
+
+  # JavaScript frameworks
+  [[sites.repos]]
+  repo = "facebook/react"
+  memo = "React UI library"
+
+  [[sites.repos]]
+  repo = "vuejs/vue"
+  memo = "Vue.js framework"
+
+  # CSS frameworks
+  [[sites.repos]]
+  repo = "twbs/bootstrap"
+  memo = "CSS framework"
+
+  [[sites.repos]]
+  repo = "tailwindlabs/tailwindcss"
+  memo = "Utility-first CSS"
+
+# DevOps and infrastructure
+[[sites]]
+remote = "https://github.com/"
+dir = "./devops/"
+warm_up_all = false
+
+  [[sites.repos]]
+  repo = "kubernetes/kubernetes"
+  rename = "k8s"
+  memo = "Container orchestration"
+
+  [[sites.repos]]
+  repo = "docker/cli"
+  memo = "Docker command line"
+
+  [[sites.repos]]
+  repo = "hashicorp/terraform"
+  memo = "Infrastructure as code"
+
+  [[sites.repos]]
+  repo = "ansible/ansible"
+  memo = "Configuration management"
+
+# Personal projects
+[[sites]]
+remote = "https://github.com/yourusername/"
+dir = "./my-projects/"
+warm_up_all = true
+
+  [[sites.repos]]
+  repo = "portfolio-website"
+  memo = "Personal website"
+
+  [[sites.repos]]
+  repo = "awesome-tool"
+  memo = "My CLI tool"
+
+  [[sites.repos]]
+  repo = "learning-rust"
+  memo = "Rust learning project"
+
+# Company projects
+[[sites]]
+remote = "git@company.com:"
+dir = "./work/"
+warm_up_all = true
+
+  [[sites.repos]]
+  repo = "main-product"
+  memo = "Company's main product"
+
+  [[sites.repos]]
+  repo = "internal-tools"
+  memo = "Internal development tools"
+
+  [[sites.repos]]
+  repo = "documentation"
+  memo = "Technical documentation"
+```
+
+## 🚀 Usage Examples
+
+### Basic Operations
+
+```bash
+# Process all configurations
 repoll repos.toml
 
-# With detailed reporting
-repoll repos.toml --report
-
-# Dry run to see what would happen
+# Preview what will be done
 repoll --dry-run repos.toml
 
-# Update only (no new clones)
-repoll --update-only repos.toml
+# Verbose output for debugging
+repoll --verbose repos.toml
+
+# Process multiple configurations
+repoll dev.toml staging.toml prod.toml
 ```
 
-### Multiple Configurations
+### Team Workflow Examples
 
 ```bash
-# Process multiple config files
-repoll config1.toml config2.toml config3.toml
+# Frontend team daily setup
+repoll frontend-team.toml
 
-# Use different configurations for different environments
-repoll development.toml --report
-repoll production.toml --update-only
+# Backend team environment
+repoll backend-team.toml
+
+# Full stack development
+repoll frontend-team.toml backend-team.toml
+
+# DevOps environment setup
+repoll devops-team.toml
 ```
 
-## Real-World Scenarios
+### Environment Management
 
-### Team Onboarding
+```bash
+# Set up development environment
+repoll development.toml
 
-Create a configuration file for new team members:
+# Deploy to staging
+repoll staging.toml
+
+# Prepare production
+repoll production.toml
+
+# Multi-environment setup
+repoll development.toml staging.toml production.toml
+```
+
+## 🔧 Pro Tips
+
+### 1. Organize by Purpose
+
+```bash
+# Create purpose-specific configurations
+learning.toml          # Educational repositories
+contributions.toml     # Open source contributions
+experiments.toml       # Experimental projects
+production.toml        # Production code
+```
+
+### 2. Use Descriptive Memos
 
 ```toml
-# team-onboarding.toml
-[[sites]]
-    remote_prefix = "git@github.com:company/"
-    dir = "./company-projects/"
-    warm_up_all = true
-
-    [[sites.repos]]
-        repo = "main-application"
-        memo = "Primary application"
-
-    [[sites.repos]]
-        repo = "shared-libraries"
-        memo = "Common utilities"
-
-    [[sites.repos]]
-        repo = "deployment-scripts"
-        memo = "Infrastructure and deployment"
-
-    [[sites.repos]]
-        repo = "documentation"
-        warm_up = false
-        memo = "Project documentation"
+[[sites.repos]]
+repo = "complex/repository-name"
+memo = "Critical service - handles user authentication and session management"
 ```
 
-New team members just run:
-```bash
-repoll team-onboarding.toml
-```
-
-### Project Migration
-
-Moving from one Git provider to another:
+### 3. Strategic Warm-up Usage
 
 ```toml
-# migration.toml
-# Old repositories (for reference)
-[[sites]]
-    remote_prefix = "https://old-git.company.com/"
-    dir = "./old-repos/"
+# Enable warm-up for active development
+[[sites.repos]]
+repo = "active/project"
+warm_up = true
+memo = "Currently working on this"
 
-    [[sites.repos]]
-        repo = "legacy-project"
-
-# New repositories (active development)
-[[sites]]
-    remote_prefix = "https://github.com/company/"
-    dir = "./new-repos/"
-    warm_up_all = true
-
-    [[sites.repos]]
-        repo = "migrated-project"
-```
-
-### Continuous Integration
-
-Use in CI/CD pipelines:
-
-```bash
-# In your CI script
-repoll ci-dependencies.toml --update-only
-# Run your tests
-go test ./...
-```
-
-## Tips and Best Practices
-
-1. **Group Related Projects**: Use separate sites for different teams or purposes
-2. **Use Meaningful Names**: Add `memo` fields to document repository purposes
-3. **Optimize Warm-up**: Only enable warm-up for repositories you actively develop
-4. **Version Control Configs**: Keep your configuration files in version control
-5. **Environment-Specific Configs**: Use different configurations for dev/staging/prod
-
-## Troubleshooting Examples
-
-### Common Issues
-
-**Permission Denied**:
-```bash
-# Make sure SSH keys are set up
-ssh-add ~/.ssh/id_rsa
-repoll repos.toml
-```
-
-**Network Issues**:
-```bash
-# Use HTTPS instead of SSH
-# Change from: git@github.com:user/repo
-# To: https://github.com/user/repo
-```
-
-**Large Repositories**:
-```bash
-# Disable warm-up for large repos
+# Disable for large or reference repositories
+[[sites.repos]]
+repo = "linux/kernel"
 warm_up = false
+memo = "Reference only - too large for auto-setup"
 ```
 
-For more detailed configuration options, see the [Configuration Guide](configuration.md). 
+### 4. Environment Variables
+
+```bash
+# Use environment-specific configurations
+export REPOLL_ENV=development
+repoll ${REPOLL_ENV}.toml
+```
+
+### 5. Batch Processing
+
+```bash
+# Process team configurations in parallel
+repoll team-*.toml
+
+# Environment-specific processing
+repoll *-${ENVIRONMENT}.toml
+```
+
+## 📞 Next Steps
+
+- **[Configuration Guide](configuration.md)** - Detailed configuration options
+- **[API Reference](api.md)** - Complete command reference
+- **[Getting Started](getting-started.md)** - Basic usage tutorial
+
+---
+
+<div class="notice--info">
+  <h4>💡 Pro Tip:</h4>
+  <p>Start with a simple configuration and gradually add more repositories. Use <code>repoll mkconf</code> to generate initial configurations from existing projects, then customize as needed!</p>
+</div> 

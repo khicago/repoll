@@ -43,7 +43,7 @@ logs/
 # Build artifacts
 dist/
 build/
-repoll
+# repoll
 
 # Test coverage
 coverage.out
@@ -63,3 +63,4 @@ docs/Gemfile.lock
 
 # GoReleaser
 dist/
+**/test-repos/
